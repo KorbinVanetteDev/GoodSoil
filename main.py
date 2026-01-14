@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "GoodSoil Development from end in progress! Check updated for more information!"
+    return "GoodSoil Development front end in progress! Check updated for more information!"
 
 if __name__ == '__main__':
     app.run()
