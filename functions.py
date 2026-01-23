@@ -28,7 +28,7 @@ def get_db():
     global bookDB
     if bookDB is None:
         bookDB = pymongo.MongoClient(
-            os.getenv("MONGODB_URI"),
+            os.environ.get('DATABASE_URL'),
             tlsAllowInvalidCertificates=True,
             serverSelectionTimeoutMS=30000,
         )
@@ -186,7 +186,7 @@ def verify(username, id):
 # Add the domain function here. Depednding on the domain, the email sending function will change.
 def send_mail(receiver_mail, username, id):
     context = ssl.create_default_context()
-    thePassword = os.getenv('EMAIL_PASSWORD')
+    thePassword = os.environ.get('DATABASE_URL')('EMAIL_PASSWORD')
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -344,7 +344,7 @@ def addNotification(username, notification):
     notificationsCollection.insert_many([notificationDoc])
     if getSettings(username)["Email"] == True:
         context = ssl.create_default_context()
-        thePassword = os.getenv('EMAIL_PASSWORD')
+        thePassword = os.environ.get('EMAIL_PASSWORD')
         funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -928,7 +928,7 @@ def forgotPassword(username, email):
             thing = random.choice(string.ascii_letters)
         newPassword = newPassword + str(thing)
     context = ssl.create_default_context()
-    emailPassword = os.getenv('EMAIL_PASSWORD')
+    emailPassword = os.environ.get('EMAIL_PASSWORD')
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -1041,7 +1041,7 @@ def deleteAccountLink(username, usernameLink, email, password, passwordTwo):
         deleteAccountsList.append(i)
     id = deleteAccountList[-1]["_id"]
     context = ssl.create_default_context()
-    thePassword = os.getenv("EMAIL_PASSWORD")
+    thePassword = os.environ.get("EMAIL_PASSWORD")
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -1140,7 +1140,7 @@ def deleteAccount(username, usernameLink, id):
     profilesCollection.delete_one(delete)
     addLog(f"{username} has successfully deleted their account.")
     context = ssl.create_default_context()
-    thePassword = os.getenv("EMAIL_PASSWORD")
+    thePassword = os.environ.get("EMAIL_PASSWORD")
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
