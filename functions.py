@@ -1,5 +1,6 @@
 import pymongo
 from pymongo.server_api import ServerApi
+from bson.objectid import ObjectId
 import smtplib
 import ssl
 import random
@@ -9,7 +10,6 @@ from flask import session
 import os
 import dns
 import string
-from bson.objectid import ObjectId
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from werkzeug.security import generate_password_hash, check_password_hash

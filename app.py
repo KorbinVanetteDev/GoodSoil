@@ -15,6 +15,7 @@ book = Flask(__name__, static_url_path='', static_folder='static', template_fold
 book.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 book.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///secret.pfps"
 book.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+book.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5 MB
 pfps = SQLAlchemy(book)
 
 upload_folder = "./pfps"

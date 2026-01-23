@@ -1,9 +1,9 @@
 dnspython
 Flask
 Flask-SQLAlchemy
-Jinja2
-numpy
-passlib
+#Jinja2
+#numpy
+#passlib
 pymongo
 SQLAlchemy==1.4.19
 requests
