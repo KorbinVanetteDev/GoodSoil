@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+     <link href="{{ url_for('static', filename='make_post.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>Make Post</title>
+</head>
+<body class="make-post-page">
+    <div class="page-shell make-post-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Content</p>
+                <h1>Make a Post</h1>
+                <p class="subhead">Share your thoughts with the community.</p>
+            </div>
+            <div class="header-actions">
+                <a class="pill-button ghost" href="/">Home</a>
+                <a class="pill-button ghost" href="/profile/{{ user['Username'] }}">Profile</a>
+            </div>
+        </header>
+
+        <div class="section-card make-post-card">
+            <form action="{{ url_for('make_post') }}" method="POST">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" minlength="2" maxlength="35" placeholder="Give your post a title..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" rows="8" placeholder="What's on your mind? Use @username to mention others." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="posttype">Post Type</label>
+                    <select id="posttype" name="posttype" required>
+                        <option value="Public">Public — Anyone can see</option>
+                        <option value="Private">Private — Only followers can see</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <a class="pill-button ghost" href="/">Cancel</a>
+                    <button type="submit" class="pill-button primary">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='navbar.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: radial-gradient(circle at 18% 82%, #f5f5f5, #ffffff);
+            min-height: 100vh;
+            padding: 80px 20px 40px;
+        }
+
+        .reports-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .reports-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .reports-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .reports-header p {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .reports-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .report-card:hover {
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .report-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .report-card__user {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .report-card__username {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .report-card__time {
+            font-size: 0.85rem;
+            color: #999;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .report-card__badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .report-card__content {
+            margin-bottom: 20px;
+        }
+
+        .report-card__text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #555;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .report-card__actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-delete:hover {
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: scale(0.98);
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            color: #764ba2;
+            gap: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state__icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state__text {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 70px 16px 30px;
+            }
+
+            .reports-header h1 {
+                font-size: 2rem;
+            }
+
+            .report-card {
+                padding: 16px;
+            }
+
+            .report-card__header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .report-card__badge {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="btn-home">← Back to Home</a>
+
+    <div class="reports-container">
+        <div class="reports-header">
+            <h1>📋 Reports</h1>
+            <p>reports and bugs. FIX NOW</p>
+        </div>
+
+        {% if reports|length > 0 %}
+            <div class="reports-grid">
+                {% for report in reports %}
+                    <div class="report-card">
+                        <div class="report-card__header">
+                            <div class="report-card__user">
+                                <span class="report-card__username">{{ report['Username'] }}</span>
+                                <span class="report-card__time">{{ report['Time'] }}</span>
+                            </div>
+                            <div class="report-card__badge">Report</div>
+                        </div>
+                        <div class="report-card__content">
+                            <p class="report-card__text">{{ report['Report'] }}</p>
+                        </div>
+                        <div class="report-card__actions">
+                            <a href="/delete_report/{{ report['_id'] }}" class="btn-delete">Delete Report</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state__icon">✨</div>
+                <p class="empty-state__text">No reports!</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

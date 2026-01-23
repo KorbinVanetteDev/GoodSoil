@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>GoodSoil</title>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-brand">🌱 GoodSoil</a>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li class="navbar-item">
+                    <a href="/">Home</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="/profile/{{user['Username']}}">Profile</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="/notifications">
+                        Notifications
+                        {% if number > 0 %}<span class="badge">{{ number }}</span>{% endif %}
+                    </a>
+                </li>
+                <li class="navbar-item">
+                    <a href="/make_post">Make Post</a>
+                </li>
+                
+                {% if settings['Public'] == False %}
+                    <li class="navbar-item">
+                        <a href="/allfollowrequests">Follow Requests</a>
+                    </li>
+                {% endif %}
+                <li class="navbar-item">
+                    <a href="/settings">Settings</a>
+                </li>
+                <li class="navbar-item">
+                    <a href="/make_report">Report</a>
+                </li>
+                {% if user['Username'] in mods %}
+                <li class="navbar-item">
+                    <a href="/all_reports" style="color: #ff9f1c;">Reports</a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="navbar-right">
+                <a href="/profile/{{user['Username']}}"><img src="/pfps/{{user['Username']}}" alt="Profile" class="navbar-avatar"></a>
+                <button class="navbar-toggle" id="navbarToggle">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="page-content">
+        <header style="margin-bottom: 40px;">
+            <h1 style="font-size: 36px; font-weight: 800; color: #0f1230; margin: 0 0 8px 0;">Welcome back! 👋</h1>
+            <p style="font-size: 16px; color: #7d8392; margin: 0;">Explore top posts from the community</p>
+        </header>
+
+        {% if posts|length == 0 %}
+            <div style="background: white; padding: 40px; border-radius: 16px; text-align: center; color: #7d8392;">
+                <p>No posts found. Be the first to share!</p>
+                <a href="/make_post" style="color: #667eea; text-decoration: none; font-weight: 600;">Create a post →</a>
+            </div>
+        {% else %}
+            <div class="posts-grid">
+                {% for post in posts %}
+                <article class="post-card">
+                    <div class="post-card__header">
+                        <span class="post-type">{{ post['Type'] }}</span>
+                    </div>
+                    
+                    <h3 class="post-card__title">{{ post['Title'] }}</h3>
+                    
+                    <p class="post-card__description">{{ post['Description'] }}</p>
+                    
+                    <div class="post-card__footer">
+                        <div class="post-card__stats">
+                            <span class="stat">
+                                <span class="stat-icon">❤</span>
+                                <span class="stat-value">{{ post['Likes'] }}</span>
+                            </span>
+                            <span class="stat">
+                                <span class="stat-icon">👁</span>
+                                <span class="stat-value">{{ post['Views']|length if post['Views'] else 0 }}</span>
+                            </span>
+                        </div>
+                        <div class="post-card__author">By <strong>{{ post['Author'] }}</strong></div>
+                    </div>
+                    
+                    <a href="/post/{{ post['_id'] }}" class="post-card__link">View Post →</a>
+                </article>
+            {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        const navbarToggle = document.getElementById('navbarToggle');
+        const navbarMenu = document.getElementById('navbarMenu');
+
+        navbarToggle.addEventListener('click', () => {
+            navbarMenu.classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.navbar-item a').forEach(link => {
+            link.addEventListener('click', () => {
+                navbarMenu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -123,4 +123,8 @@ public class TodoList { // Class to manage a todo list
     }
     System.out.println("╚═══════════════════════════════════════╝");
 }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b4a07e3 (BANG)

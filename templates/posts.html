@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">@{{ username }}</p>
+                <h1>{{ title }}</h1>
+            </div>
+            <a class="pill-button ghost" href="/profile/{{ username }}">Back to profile</a>
+        </header>
+
+        {% if posts|length == 0 %}
+            <div class="section-card">
+                <p>No posts found.</p>
+            </div>
+        {% else %}
+            <div class="posts-grid">
+                {% for post in posts %}
+                    <article class="post-card">
+                        <div class="post-card__header">
+                            <p class="eyebrow">{{ post['Type'] }}</p>
+                            <a class="pill-button primary" href="/post/{{ post['_id'] }}">Open</a>
+                        </div>
+                        <h3>{{ post['Title'] }}</h3>
+                        <p class="post-card__desc">{{ post['Description'] }}</p>
+                        <div class="post-card__meta">
+                            <span>Likes: {{ post['Likes'] }}</span>
+                            <span>Views: {{ post['Views']|length if post['Views'] else 0 }}</span>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

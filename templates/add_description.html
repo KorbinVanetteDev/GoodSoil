@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>Settings | {{ user['Username'] }}</title>
+</head>
+<body>
+    <h2><a href="/">Home</a></h2>
+    <div class="auth">
+        <div class="login-form-body">
+            <div class="login-form-heading">
+                <h1>Add Bio</h1>
+                <br>
+            </div>
+            <div class="login-form-form">
+                <form method="POST" action="{{ url_for('add_description') }}">
+                    <textarea name="description" id="description" rows="8" cols="30" required>{{ description }}</textarea>
+                    <br>
+                    <button class="login-form-button">Save Bio</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

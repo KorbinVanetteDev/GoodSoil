@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" type="text/css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>Add Profile Photo</title>
+    <style>
+        .pfp-page {
+            background: radial-gradient(circle at 18% 20%, rgba(102,126,234,0.16), transparent 40%),
+                        radial-gradient(circle at 82% 0%, rgba(118,75,162,0.16), transparent 35%),
+                        #f5f5f5;
+            color: #0f1230;
+            min-height: 100vh;
+        }
+
+        .pfp-shell {
+            padding-top: 32px;
+        }
+
+        .pfp-card {
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .file-input-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #image {
+            display: none;
+        }
+
+        .file-display {
+            padding: 20px;
+            background: #f9f9fc;
+            border: 2px dashed #dfe2f3;
+            border-radius: 12px;
+            text-align: center;
+            color: #4b4f68;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-display.has-file {
+            border-color: #667eea;
+            background: #f0f3ff;
+            color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .form-actions .pill-button {
+            flex: 1;
+        }
+    </style>
+</head>
+<body class="pfp-page">
+    <div class="page-shell pfp-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Profile</p>
+                <h1>Add Profile Photo</h1>
+                <p class="subhead">Choose an image to use as your profile picture.</p>
+            </div>
+            <div class="header-actions">
+                <a class="pill-button ghost" href="/">Home</a>
+            </div>
+        </header>
+
+        <div class="pfp-card section-card">
+            <form method="POST" action="{{ url_for('addpfp') }}" enctype="multipart/form-data" id="pfp-form">
+                <div class="file-input-wrapper">
+                    <div class="file-display" id="file-display">
+                        Click "Choose File" to select an image
+                    </div>
+                    <input type="file" name="image" id="image" accept="image/*" required>
+                    
+                    <div class="form-actions">
+                        <button type="button" onclick="document.getElementById('image').click()" class="pill-button ghost">Choose File</button>
+                        <button type="submit" class="pill-button primary">Upload</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('image').addEventListener('change', function(e) {
+            const display = document.getElementById('file-display');
+            if (this.files && this.files[0]) {
+                display.textContent = this.files[0].name;
+                display.classList.add('has-file');
+            } else {
+                display.textContent = 'Click "Choose File" to select an image';
+                display.classList.remove('has-file');
+            }
+        });
+    </script>
+</body>
+</html>

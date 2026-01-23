@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profileUser['Username'] }}'s Profile</title>
+</head>
+<body class="profile-page">
+    <div class="profile-shell">
+        <div class="profile-hero">
+            <div class="profile-hero__glow"></div>
+            <div class="profile-hero__content">
+                <div class="profile-identity">
+                    <div class="profile-avatar">
+                        <img src="/pfps/{{ profileUser['Username'] }}" alt="{{ profileUser['Username'] }} profile photo">
+                    </div>
+                    <div class="profile-nameblock">
+                        <p class="profile-tag">@{{ profileUser['Username'] }}</p>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <h1>{{ profileUser['Username'] }}</h1>
+                            {% if profileUser['Username'] in mods %}
+                                <span class="mod-badge">MOD</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <a class="pill-button ghost" href="/">Home</a>
+                    {% if follow == True %}
+                        <a class="pill-button danger" href="/unfollow/{{ profileUser['Username'] }}">Unfollow</a>
+                    {% elif requestPending %}
+                        <button class="pill-button" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); cursor: not-allowed;" disabled>Request Sent</button>
+                    {% elif follow == False %}
+                        <a class="pill-button primary" href="/follow/{{ profileUser['Username'] }}">Follow</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="profile-stats">
+                <a class="profile-stat-card" href="/followers/{{ profileUser['Username'] }}">
+                    <p class="label">Followers</p>
+                    <p class="value">{{ profileUser['Followers'] | length }}</p>
+                </a>
+                <a class="profile-stat-card" href="/following/{{ profileUser['Username'] }}">
+                    <p class="label">Following</p>
+                    <p class="value">{{ profileUser['Following'] | length }}</p>
+                </a>
+                <a class="profile-stat-card" href="/publicposts/{{ profileUser['Username'] }}">
+                    <p class="label">Public posts</p>
+                    <p class="value">View</p>
+                </a>
+                <a class="profile-stat-card" href="/privateposts/{{ profileUser['Username'] }}">
+                    <p class="label">Private posts</p>
+                    <p class="value">View</p>
+                </a>
+            </div>
+        </div>
+
+        <div class="profile-panels">
+            <div class="profile-card">
+                <h3>About</h3>
+                <p>
+                    {% if profileUser['Description'] %}
+                        {{ profileUser['Description'] }}
+                    {% else %}
+                        {{ profileUser['Username'] }} has not set a bio yet.
+                    {% endif %}
+                </p>
+            </div>
+            <div class="profile-card">
+                <h3>Explore</h3>
+                <div class="link-grid">
+                    <a class="pill-button ghost" href="/publicposts/{{ profileUser['Username'] }}">Public posts</a>
+                    <a class="pill-button ghost" href="/privateposts/{{ profileUser['Username'] }}">Private posts</a>
+                    <a class="pill-button ghost" href="/followers/{{ profileUser['Username'] }}">Followers</a>
+                    <a class="pill-button ghost" href="/following/{{ profileUser['Username'] }}">Following</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

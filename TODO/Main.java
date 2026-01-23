@@ -320,4 +320,8 @@ public class Main extends JFrame {
             app.setVisible(true);
         });
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> b4a07e3 (BANG)

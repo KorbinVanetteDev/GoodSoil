@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='settings.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+</head>
+<body class="settings-page">
+    <div class="page-shell settings-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Account</p>
+                <h1>Settings</h1>
+                <p class="subhead">Tune privacy, notifications, and profile details.</p>
+            </div>
+            <div class="header-actions">
+                <a class="pill-button ghost" href="/">Home</a>
+                <a class="pill-button ghost" href="/profile/{{ user['Username'] }}">Profile</a>
+            </div>
+        </header>
+
+        <div class="settings-grid">
+            <div class="section-card">
+                <div class="setting-row">
+                    <div>
+                        <p class="eyebrow">Notifications</p>
+                        <h3>Email notifications</h3>
+                        <p class="setting-desc">Get an email when you receive a notification.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" onchange="window.location.href='/settings/emailnotifications'" {% if settings['Email'] %}checked{% endif %}>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="section-card">
+                <div class="setting-row">
+                    <div>
+                        <p class="eyebrow">Privacy</p>
+                        <h3>Public account</h3>
+                        <p class="setting-desc">When off, follow requests must be approved.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" onchange="window.location.href='/settings/public'" {% if settings['Public'] %}checked{% endif %}>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="section-card actions-card">
+                <h3>Profile & Security</h3>
+                <div class="action-links">
+                    <a class="pill-button primary" href="/add_description">Add bio</a>
+                    <a class="pill-button ghost" href="/addpfp">Add profile photo</a>
+                    <a class="pill-button ghost" href="/change_password">Change password</a>
+                    <a class="pill-button ghost" href="/logout">Logout</a>
+                    <a class="pill-button danger" href="/delete_account">Delete account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

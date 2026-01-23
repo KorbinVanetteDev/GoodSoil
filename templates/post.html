@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico">
+    <title>{{post['Title']}}</title>
+    <style>
+        .post-page {
+            background: radial-gradient(circle at 18% 20%, rgba(102,126,234,0.16), transparent 40%),
+                        radial-gradient(circle at 82% 0%, rgba(118,75,162,0.16), transparent 35%),
+                        #f5f5f5;
+            color: #0f1230;
+            min-height: 100vh;
+        }
+
+        .post-shell {
+            padding-top: 32px;
+            padding-bottom: 48px;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .post-header {
+            margin-bottom: 32px;
+        }
+
+        .post-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: #0f1230;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .post-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 14px;
+            color: #7d8392;
+            margin-top: 16px;
+        }
+
+        .post-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-meta-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .post-meta-link:hover {
+            color: #764ba2;
+        }
+
+        .post-content {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(15, 18, 48, 0.08);
+            line-height: 1.7;
+            color: #2d3142;
+            word-break: break-word;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .post-actions .pill-button {
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .comment-section {
+            margin-top: 40px;
+        }
+
+        .comment-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f1230;
+            margin-bottom: 20px;
+        }
+
+        .comment-form {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 24px rgba(15, 18, 48, 0.08);
+        }
+
+        .comment-form label {
+            display: block;
+            font-weight: 600;
+            color: #2d3142;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e8eaf0;
+            border-radius: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 15px;
+            color: #0f1230;
+            background: #fafbfc;
+            resize: vertical;
+            min-height: 120px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .comment-form textarea:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+        }
+
+        .comment-form button {
+            margin-top: 12px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .comment-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .comment-item {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(15, 18, 48, 0.06);
+            border-left: 4px solid #667eea;
+        }
+
+        .comment-author {
+            font-weight: 700;
+            color: #0f1230;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .comment-date {
+            font-size: 13px;
+            color: #9ca3b4;
+            margin-bottom: 12px;
+        }
+
+        .comment-text {
+            color: #2d3142;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .comment-actions a {
+            font-size: 13px;
+            padding: 6px 12px;
+            background: #f0f2f7;
+            border-radius: 8px;
+            color: #667eea;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .comment-actions a:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .no-comments {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9ca3b4;
+            font-size: 15px;
+        }
+
+        .share-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.2s ease;
+        }
+
+        .share-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .share-content {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            max-width: 480px;
+            width: 90%;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .share-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 28px;
+            font-weight: 300;
+            color: #9ca3b4;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .share-close:hover {
+            color: #0f1230;
+        }
+
+        .share-content h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #0f1230;
+        }
+
+        .share-content p {
+            font-size: 14px;
+            color: #7d8392;
+            margin-bottom: 12px;
+        }
+
+        .share-link {
+            background: #f0f2f7;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-family: 'Monaco', monospace;
+            font-size: 13px;
+            color: #667eea;
+            word-break: break-all;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .share-link:hover {
+            border-color: #667eea;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body class="post-page">
+    <div class="page-shell post-shell">
+        <header class="post-header">
+            <div style="margin-bottom: 16px;">
+                <a href="/" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 14px;">← Back Home</a>
+            </div>
+            <h1 class="post-title">{{post['Title']}}</h1>
+            <div class="post-meta">
+                <div class="post-meta-item">
+                    By <a href="/profile/{{post['Author']}}" class="post-meta-link">{{post['Author']}}</a>
+                </div>
+                <div class="post-meta-item">{{post['Created']}}</div>
+                <div class="post-meta-item">{{ post['Views'] | length }} <span style="color: #7d8392;">views</span></div>
+                <div class="post-meta-item">{{post['Likes']}} <span style="color: #7d8392;">likes</span></div>
+            </div>
+        </header>
+
+        <div class="post-content">
+            {{post['Description']}}
+        </div>
+
+        <div class="post-actions">
+            {% if liked == True %}
+                <a href="/unlikePost/{{post['_id']}}" class="pill-button primary">❤ Unlike</a>
+            {% else %}
+                <a href="/likePost/{{post['_id']}}" class="pill-button ghost">♡ Like</a>
+            {% endif %}
+            <button class="pill-button ghost" onclick="openShare()">🔗 Share</button>
+            {% if perms == True %}
+                <a href="/edit_post/{{post['_id']}}" class="pill-button ghost">✏ Edit</a>
+                <a href="/delete_post/{{post['_id']}}" class="pill-button ghost" style="color: #d63031;">🗑 Delete</a>
+            {% endif %}
+        </div>
+
+        <div id="shareModal" class="share-modal">
+            <div class="share-content">
+                <span class="share-close" onclick="closeShare()">&times;</span>
+                <h2>Share this post</h2>
+                <p>Copy the link below:</p>
+                <div class="share-link">https://goodsoil.onrender.com/post/{{post['_id']}}</div>
+            </div>
+        </div>
+
+        <div class="comment-section">
+            <h3>Comments</h3>
+
+            {% if username != False %}
+                <div class="comment-form">
+                    <form action="/comment_post/{{post['_id']}}" method="POST">
+                        <label for="comment">Leave a comment</label>
+                        <textarea name="comment" id="comment" placeholder="Share your thoughts..." required></textarea>
+                        <button type="submit">Post Comment</button>
+                    </form>
+                </div>
+            {% else %}
+                <div style="background: white; padding: 20px; border-radius: 16px; text-align: center; color: #7d8392; margin-bottom: 32px;">
+                    <p><a href="/login" style="color: #667eea; text-decoration: none; font-weight: 600;">Log in</a> to comment on this post.</p>
+                </div>
+            {% endif %}
+
+            {% if comments == [] %}
+                <div class="no-comments">
+                    <p>No comments yet. Be the first to share your thoughts!</p>
+                </div>
+            {% else %}
+                <div class="comments-list">
+                    {% for comment in comments %}
+                        <div class="comment-item">
+                            <div class="comment-author">{{comment['Author']}}</div>
+                            <div class="comment-date">{{comment['Created']}}</div>
+                            <div class="comment-text">{{comment['Comment']}}</div>
+                            {% if username != False %}
+                                {% if username in mods or comment['Author'] == username %}
+                                    <div class="comment-actions">
+                                        <a href="/edit_comment/{{comment['_id']}}">Edit</a>
+                                        <a href="/delete_comment/{{comment['_id']}}">Delete</a>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function openShare() {
+            document.getElementById('shareModal').classList.add('show');
+        }
+
+        function closeShare() {
+            document.getElementById('shareModal').classList.remove('show');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('shareModal');
+            if (event.target === modal) {
+                closeShare();
+            }
+        }
+    </script>
+</body>
+</html>

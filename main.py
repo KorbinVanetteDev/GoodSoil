@@ -1,10 +1,2 @@
-from flask import Flask
-
-app = Flask(__name__)
-
-@app.route('/')
-def home():
-    return "GoodSoil Development front end in progress! Check updated for more information!"
-
-if __name__ == '__main__':
-    app.run()
+from app import book
+book.run(host='127.0.0.1', port=8000)

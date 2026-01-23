@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='makereport.css') }}" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body class="report-page">
+    <center>
+        <div class="report-shell">
+            <div class="report-card">
+                <div class="report-header">
+                    <p class="eyebrow">🚨 Safety & Moderation</p>
+                    <h1>Make a Report</h1>
+                    <p>Help us keep the community safe and respectful</p>
+                </div>
+
+                <div class="warning-box">
+                    <p><strong>Note:</strong> False reports may result in account restrictions. Please only report content that violates our community guidelines.</p>
+                </div>
+
+                <form action="{{ url_for('make_report') }}" method="POST">
+                    <div class="form-group">
+                        <label for="description">Describe the issue</label>
+                        <textarea 
+                            name="description" 
+                            id="description" 
+                            placeholder="Please provide details about what you're reporting, including usernames, post links, or specific behavior..."
+                            required
+                        ></textarea>
+                        <span class="char-hint">Be as specific as possible to help moderators investigate</span>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="/" class="pill-button ghost">Cancel</a>
+                        <button type="submit" class="pill-button primary">Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+</center>
+</body>
+</html>

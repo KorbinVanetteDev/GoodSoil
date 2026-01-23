@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url_for('static', filename='notifications.css') }}" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications</title>
+</head>
+<body class="notifications-page">
+    <div class="notifications-container">
+        <div class="notifications-header">
+            <div class="notifications-title">
+                <h1>🔔 Notifications</h1>
+                <p>Stay updated with your activity</p>
+            </div>
+            <div class="notifications-actions">
+                <a href="/" class="pill-button ghost">← Home</a>
+                {% if notifications != [] %}
+                    <a href="/clear_notifications" class="pill-button primary">Clear All</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if notifications == [] %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <h3>All caught up!</h3>
+                <p>You don't have any notifications right now.</p>
+            </div>
+        {% else %}
+            <div class="notifications-list">
+                {% for notif in notifications %}
+                    <div class="notification-card {% if notif['Seen'] == False %}unread{% else %}read{% endif %}">
+                        <div class="notification-icon">
+                            {% if notif['Seen'] == False %}🔴{% else %}✅{% endif %}
+                        </div>
+                        <div class="notification-content">
+                            {{ notif['Notification'] | safe }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -4,7 +4,9 @@ Flask-SQLAlchemy
 Jinja2
 numpy
 passlib
-pymongo==3.11.4
+pymongo
 SQLAlchemy==1.4.19
 requests
 gunicorn==21.2.0
+python-dotenv
+certifi

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+    <div class="auth">
+        <div class="login-form-body">
+            <div class="login-form-heading">
+                <br>
+            </div>
+            <div class="login-form-form">
+                <form method = "POST" action="../login">
+                    <h2>Login</h2>
+                    <input class="login-form-input" placeholder="Username" name="username" autocomplete="off" required></input>
+                    <input type="password" class="login-form-input" placeholder="password" name="password" required></input><br>
+                    <button class="login-form-button">Login</button>
+                </form>
+                <p>Or click <a href="/signup">here</a> to create an account</p>
+                <br>
+                <p><a href="/forgot_password">Forgot Password?</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
