@@ -21,23 +21,48 @@ import certifi
 load_dotenv()
 
 # Initialize MongoDB client
-bookDB = pymongo.MongoClient(
-    os.getenv("MONGODB_URI"),
-    tlsAllowInvalidCertificates=True,
-    serverSelectionTimeoutMS=30000,
-)
+# Initialize MongoDB client (lazy connection)
+bookDB = None
 
-usersDB = bookDB.Users
-profilesCollection = usersDB.Profiles
-notificationsCollection = usersDB.Notifications
-settingsCollection = usersDB.Settings
-followRequestsCollection = usersDB.FollowRequests
-reportsCollection = usersDB.Reports
-forgotPasswordCollection = usersDB.ForgotPassword
-deleteAccountsCollection = usersDB.DeleteAccount
-postsDB = bookDB.Posts
-postsCollection = postsDB.Posts
-commentsCollection = postsDB.Comments
+def get_db():
+    global bookDB
+    if bookDB is None:
+        bookDB = pymongo.MongoClient(
+            os.getenv("MONGODB_URI"),
+            tlsAllowInvalidCertificates=True,
+            serverSelectionTimeoutMS=30000,
+        )
+    return bookDB
+
+usersDB = None
+profilesCollection = None
+notificationsCollection = None
+settingsCollection = None
+followRequestsCollection = None
+reportsCollection = None
+forgotPasswordCollection = None
+deleteAccountsCollection = None
+postsDB = None
+postsCollection = None
+commentsCollection = None
+
+def init_collections():
+    global usersDB, profilesCollection, notificationsCollection, settingsCollection
+    global followRequestsCollection, reportsCollection, forgotPasswordCollection
+    global deleteAccountsCollection, postsDB, postsCollection, commentsCollection
+    
+    db = get_db()
+    usersDB = db.Users
+    profilesCollection = usersDB.Profiles
+    notificationsCollection = usersDB.Notifications
+    settingsCollection = usersDB.Settings
+    followRequestsCollection = usersDB.FollowRequests
+    reportsCollection = usersDB.Reports
+    forgotPasswordCollection = usersDB.ForgotPassword
+    deleteAccountsCollection = usersDB.DeleteAccount
+    postsDB = db.Posts
+    postsCollection = postsDB.Posts
+    commentsCollection = postsDB.Comments
 
 #mods hehehe thats me
 mods = ["polto"]

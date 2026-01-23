@@ -7,6 +7,10 @@ from functions import mods
 import os
 from dotenv import load_dotenv
 
+from functions import init_collections
+init_collections()
+
+
 # Load environment variables from .env file
 load_dotenv()
 
