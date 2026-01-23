@@ -24,7 +24,7 @@ load_dotenv()
 bookDB = pymongo.MongoClient(
     os.getenv('MONGODB_URI'),
     server_api=ServerApi('1'),
-    tlsAllowInvalidCertificates=True
+    tlsCAFile=certifi.where()
 )
 usersDB = bookDB.Users
 profilesCollection = usersDB.Profiles
