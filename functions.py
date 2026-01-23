@@ -28,7 +28,7 @@ def get_db():
     global bookDB
     if bookDB is None:
         bookDB = pymongo.MongoClient(
-            os.environ.get('DATABASE_URL'),
+            os.environ.get('MONGODB_URI'),
             tlsAllowInvalidCertificates=True,
             serverSelectionTimeoutMS=30000,
         )
@@ -186,7 +186,7 @@ def verify(username, id):
 # Add the domain function here. Depednding on the domain, the email sending function will change.
 def send_mail(receiver_mail, username, id):
     context = ssl.create_default_context()
-    thePassword = os.environ.get('DATABASE_URL')('EMAIL_PASSWORD')
+    thePassword = os.environ.get('EMAIL_PASSWORD')
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
