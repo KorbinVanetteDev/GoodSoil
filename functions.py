@@ -1,5 +1,5 @@
 import pymongo
-from pymongo.server_api import ServerApi
+#from pymongo.server_api import ServerApi
 from bson.objectid import ObjectId
 import smtplib
 import ssl
@@ -22,9 +22,9 @@ load_dotenv()
 
 # Initialize MongoDB client
 bookDB = pymongo.MongoClient(
-    os.getenv('MONGODB_URI'),
-    server_api=ServerApi('1'),
-    tlsCAFile=certifi.where()
+    os.getenv("MONGODB_URI"),
+    tlsCAFile=certifi.where(),
+    tlsAllowInvalidCertificates=True,
 )
 usersDB = bookDB.Users
 profilesCollection = usersDB.Profiles
