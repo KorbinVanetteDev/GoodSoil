@@ -979,7 +979,8 @@ def forgotPassword(username, email):
     profilesCollection.insert_many([user])
     addLog(f"{username} successfully reset their password.")
     return True
-
+# Work in progress
+# TODO: finalize account deletion function
 def deleteAccountLink(username, usernameLink, email, password, passwordTwo):
     if username != usernameLink:
         addLog(f"{username} attempted to delete the account of {usernameLink}.")
@@ -1078,7 +1079,7 @@ def deleteAccountLink(username, usernameLink, email, password, passwordTwo):
         print(f"Delete account email error: {e}")
         return "Request to send email failed. Please try again later."
 
-    
+  #TODO: finish  
 def deleteAccount(username, usernameLink, id):
     if username != usernameLink:
         addLog(f"{username} attempted to delete the account of {usernameLink}.")
