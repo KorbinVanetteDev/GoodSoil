@@ -23,9 +23,10 @@ load_dotenv()
 # Initialize MongoDB client
 bookDB = pymongo.MongoClient(
     os.getenv("MONGODB_URI"),
-    tlsCAFile=certifi.where(),
     tlsAllowInvalidCertificates=True,
+    serverSelectionTimeoutMS=30000,
 )
+
 usersDB = bookDB.Users
 profilesCollection = usersDB.Profiles
 notificationsCollection = usersDB.Notifications
