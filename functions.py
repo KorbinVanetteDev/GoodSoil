@@ -231,7 +231,7 @@ def send_mail(receiver_mail, username, id):
 """
     try:
         params = {
-            "from": "GoodSoil <onboarding@resend.dev>",
+            "from": "GoodSoil <goodsoilverify@gmail.com>",
             "to": [receiver_mail],
             "subject": "GoodSoil Email Verification",
             "html": funHTMLCode,
@@ -383,7 +383,7 @@ def addNotification(username, notification):
         try:
             receiver_email = getUser(username)["Email"]
             params = {
-                "from": "GoodSoil <onboarding@resend.dev>",
+                "from": "GoodSoil <goodsoilverify@gmail.com>",
                 "to": [receiver_email],
                 "subject": "GoodSoil Notification",
                 "html": funHTMLCode,
@@ -963,7 +963,7 @@ def forgotPassword(username, email):
 """
     try:
         params = {
-            "from": "GoodSoil <onboarding@resend.dev>",
+            "from": "GoodSoil <goodsoilverify@gmail.com>",
             "to": [userEmail],
             "subject": "GoodSoil Password Reset",
             "html": funHTMLCode,
@@ -1065,7 +1065,7 @@ def deleteAccountLink(username, usernameLink, email, password, passwordTwo):
     try:
         userEmail = getUser(username)["Email"]
         params = {
-            "from": "GoodSoil <onboarding@resend.dev>",
+            "from": "GoodSoil <goodsoilverify@gmail.com>",
             "to": [userEmail],
             "subject": "GoodSoil Account Deletion Confirmation",
             "html": funHTMLCode,
@@ -1150,7 +1150,7 @@ def deleteAccount(username, usernameLink, id):
 """
     try:
         params = {
-            "from": "GoodSoil <onboarding@resend.dev>",
+            "from": "GoodSoil <goodsoilverify@gmail.com>",
             "to": [email],
             "subject": "GoodSoil Account Deletion Confirmation",
             "html": funHTMLCode,
