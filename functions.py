@@ -477,7 +477,8 @@ def getTop():
     number = 0
     posts = []
     pinned = []
-    for post in postsCollection.find().sort("Likes", -1):
+    # Get all posts sorted by Pinned first (descending), then by Likes (descending)
+    for post in postsCollection.find().sort([("Pinned", -1), ("Likes", -1)]):
         if post.get("Pinned", False):
             pinned.append(post)
         else:
@@ -491,7 +492,8 @@ def getNew():
     number = 0
     posts = []
     pinned = []
-    for post in postsCollection.find().sort("Created", -1):
+    # Get all posts sorted by Pinned first (descending), then by Created (descending)
+    for post in postsCollection.find().sort([("Pinned", -1), ("Created", -1)]):
         if post.get("Pinned", False):
             pinned.append(post)
         else:
