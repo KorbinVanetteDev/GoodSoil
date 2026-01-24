@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, send_file, Response
 from string import printable
 from werkzeug.security import check_password_hash
 from flask_sqlalchemy import SQLAlchemy
-from functions import addCookie, getCookie, removeCookie, createAccount, getUser, getHashedPassword, verify, checkEmailExists, checkUsernameExists, add_Description, follow, unFollow, getNotifications, deletePost, allSeen, makePost, getPost, getPostByID, viewPost, editComment, getCommentByID, addLog, addReport, deleteReport, getAllReports, changePassword, getNotificationsNotShown, forgotPassword, deleteAccount, allFollowRequests, topTen, changePublicSettings, changeEmailSettings, addNotification, denyTheFollowRequest, getSettings, editAPost, send_mail, likePost, unlikePost, comment, getAllUserPrivatePosts, getAllUserPublicPosts, deleteComment, changeEmail, getComments, clearNotifications, acceptTheFolloweRequest, deleteAccountLink, checkFollowRequest
+from functions import addCookie, getCookie, removeCookie, createAccount, getUser, getHashedPassword, verify, checkEmailExists, checkUsernameExists, add_Description, follow, unFollow, getNotifications, deletePost, allSeen, makePost, getPost, getPostByID, viewPost, editComment, getCommentByID, addLog, addReport, deleteReport, getAllReports, changePassword, getNotificationsNotShown, forgotPassword, deleteAccount, allFollowRequests, topTen, changePublicSettings, changeEmailSettings, addNotification, denyTheFollowRequest, getSettings, editAPost, send_mail, likePost, unlikePost, comment, getAllUserPrivatePosts, getAllUserPublicPosts, deleteComment, changeEmail, getComments, clearNotifications, acceptTheFolloweRequest, deleteAccountLink, checkFollowRequest, pinPost, unpinPost
 from functions import mods
 import os
 from dotenv import load_dotenv
@@ -724,3 +724,32 @@ def delete_account():
             return render_template("success.html", success = "A confirmation email has been sent. Please check your inbox.")
         else:
             return render_template("error.html", error = f"An error occurred while trying to request account deletion! Error: {function}")
+        
+@book.route("/pin_post/<id>")
+def pin_post(id):
+    if getPostByID(id) == False:
+        return render_template("error.html", error = "This post does not exist!")
+    if getCookie("User") == False:
+        return render_template("error.html", error = "You must be logged in to pin a post!")
+    if getCookie("User") not in mods:
+        return render_template("error.html", error = "You do not have permission to pin posts!")
+    function = pinPost(getCookie("User"), id)
+    if function == True:
+        return redirect(f"/post/{id}")
+    else:
+        return render_template("error.html", error = f"An error occurred while trying to pin this post! Error: {function}")
+    
+@book.route("/unpin_post/<id>")
+def unpin_post(id):
+    if getPostByID(id) == False:
+        return render_template("error.html", error = "This post does not exist!")
+    if getCookie("User") == False:
+        return render_template("error.html", error="You must be logged in to unpin a post!")
+    if getCookie("User") not in mods:
+        return render_template("error.html", error = "You do not have permission to unpin posts!")
+    function = unpinPost(getCookie("User"), int(id))
+    if function == True:
+        addLog(f"Post Unpinned: User {getCookie('User')} has unpinned post {id}")
+        return redirect(f"/post/{id}")
+    else:
+        return render_template("error.html", error = f"An error occurred while trying to unpin this post! Error: {function}")

@@ -440,7 +440,7 @@ def makePost(username, title, description, postType):
         allMentions = ", ".join(mentions)
         addLog(f"{username} mentioned {allMentions} in a <a href='/post/{postID}'>post</a>.")
         addNotification(username, f"You mentioned {allMentions} in your <a href='/post/{postID}'>post</a>.")
-    document = [{"_id": postID, "Author": username, "Title": title, "Description": description, "Likes": 0, "LikesPeople": [], "Views": [], "Type": postType, "Created": datetime.datetime.now()}]
+    document = [{"_id": postID, "Author": username, "Title": title, "Description": description, "Likes": 0, "LikesPeople": [], "Views": [], "Type": postType, "Created": datetime.datetime.now(), "Pinned": False}]
     postsCollection.insert_many(document)
 
 def viewPost(id, username):
@@ -476,20 +476,30 @@ def deletePost(username, postID):
 def getTop():
     number = 0
     posts = []
-    for post in postsCollection.find().sort("Likes", -1):
-        if number == 10:
-            return posts
-        posts.append(post)
-        number+=1
+    pinned = []
+    for post in postsCollection.find().sort("Pinned", -1).sort("Likes", -1):
+        if post.get("Pinned", False):
+            pinned.append(post)
+        else:
+            if number == 10:
+                break
+            posts.append(post)
+            number += 1
+    return pinned + posts
 
 def getNew():
     number = 0
     posts = []
-    for post in postsCollection.find().sort("Created", -1):
-        if number == 10:
-            return posts
-        posts.append(post)
-        number+=1
+    pinned = []
+    for post in postsCollection.find().sort("Pinned", -1).sort("Created", -1):
+        if post.get("Pinned", False):
+            pinned.append(post)
+        else:
+            if number == 10:
+                break
+            posts.append(post)
+            number += 1
+    return pinned + posts
 
 def getSettings(username):
     myQuery = {"Username": username}
@@ -1169,8 +1179,29 @@ def topTen():
         topTen.append(i)
     return topTen
 
+def pinPost(username, postID):
+    if username not in mods:
+        return "You do not have permission to pin posts."
+    post = getPostByID(int(postID))
+    if post == False:
+        return "That post does not exist."
+    post["Pinned"] == True
+    delete = {"_id": int(postID)}
+    postsCollection.delete_one(delete)
+    postsCollection.insert_many([post])
+    return True
 
-    
+def unpinPost(username, postID):
+    if username not in mods:
+        return "You do not have permission to unpin this post."
+    post = getPostByID(int(postID))
+    if post == False:
+        return "That post does not exist."
+    post["Pinned"] = False
+    delete = {"_id": int(postID)}
+    postsCollection.delete_one(delete)
+    postsCollection.insert_many([post])
+    return True
 
 
     

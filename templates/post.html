@@ -327,6 +327,13 @@
                 <a href="/edit_post/{{post['_id']}}" class="pill-button ghost">✏ Edit</a>
                 <a href="/delete_post/{{post['_id']}}" class="pill-button ghost" style="color: #d63031;">🗑 Delete</a>
             {% endif %}
+            {% if username in mods %}
+                {% if post.Pinned %}
+                    <a href="/unpin_post/{{ post._id }}" class="btn btn-warning">Unpin Post</a>
+                {% else %}
+                    <a href="/pin_post/{{ post._id }}" class="btn btn-primary">Pin Post</a>
+                {% endif %}
+            {% endif %}
         </div>
 
         <div id="shareModal" class="share-modal">
