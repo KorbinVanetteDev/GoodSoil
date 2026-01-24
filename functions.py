@@ -1175,11 +1175,19 @@ def deleteAccount(username, usernameLink, id):
 
 
 def topTen():
-    topTen = []
-    myDoc = postsCollection.find({"Type": "Public"}).sort("Likes", -1).limit(10)
-    for i in myDoc:
-        topTen.append(i)
-    return topTen
+    number = 0
+    posts = []
+    pinned = []
+    myDoc = postsCollection.find({"Type": "Public"}).sort([("Pinned", -1), ("Likes", -1)])
+    for post in myDoc:
+        if post.get("Pinned", False):
+            pinned.append(post)
+        else:
+            if number == 10:
+                break
+            posts.append(post)
+            number += 1
+    return pinned + posts
 
 def pinPost(username, postID):
     if username not in mods:
