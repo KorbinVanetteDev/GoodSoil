@@ -477,7 +477,7 @@ def getTop():
     number = 0
     posts = []
     pinned = []
-    for post in postsCollection.find().sort("Pinned", -1).sort("Likes", -1):
+    for post in postsCollection.find().sort("Likes", -1):
         if post.get("Pinned", False):
             pinned.append(post)
         else:
@@ -491,7 +491,7 @@ def getNew():
     number = 0
     posts = []
     pinned = []
-    for post in postsCollection.find().sort("Pinned", -1).sort("Created", -1):
+    for post in postsCollection.find().sort("Created", -1):
         if post.get("Pinned", False):
             pinned.append(post)
         else:
@@ -1181,14 +1181,15 @@ def topTen():
 
 def pinPost(username, postID):
     if username not in mods:
-        return "You do not have permission to pin posts."
+        return "You do not have permission to pin this post."
     post = getPostByID(int(postID))
     if post == False:
         return "That post does not exist."
-    post["Pinned"] == True
+    post["Pinned"] = True
     delete = {"_id": int(postID)}
     postsCollection.delete_one(delete)
     postsCollection.insert_many([post])
+    addLog(f"{username} pinned the post titled '{post['Title']}' by {post['Author']}")
     return True
 
 def unpinPost(username, postID):
@@ -1201,6 +1202,7 @@ def unpinPost(username, postID):
     delete = {"_id": int(postID)}
     postsCollection.delete_one(delete)
     postsCollection.insert_many([post])
+    addLog(f"{username} unpinned the post titled '{post['Title']}' by {post['Author']}")
     return True
 
 
