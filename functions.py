@@ -1,8 +1,8 @@
 import pymongo
 #from pymongo.server_api import ServerApi
 from bson.objectid import ObjectId
-import smtplib
-import ssl
+#import smtplib
+#import ssl
 import random
 import requests
 import json
@@ -10,15 +10,18 @@ from flask import session
 import os
 import dns
 import string
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
+#from email.mime.text import MIMEText
+#from email.mime.multipart import MIMEMultipart
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 from dotenv import load_dotenv
 import certifi
+import resend
 
 # Load environment variables from .env file
 load_dotenv()
+
+resend.api_key = os.environ.get('RESEND_API_KEY')
 
 # Initialize MongoDB client
 # Initialize MongoDB client (lazy connection)
@@ -184,9 +187,8 @@ def verify(username, id):
 # For email, start out with google and then branch off into maybe titain mail with domain.
 # Free domain is from the github students pack at name.com (Hopefully) 
 # Add the domain function here. Depednding on the domain, the email sending function will change.
+
 def send_mail(receiver_mail, username, id):
-    context = ssl.create_default_context()
-    thePassword = os.environ.get('EMAIL_PASSWORD')
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -227,20 +229,14 @@ def send_mail(receiver_mail, username, id):
 </body>
 </html>
 """
-    message= MIMEMultipart("alternative")
-    message["Subject"] = "GoodSoil Email Verification"
-    textHTML = MIMEText(funHTMLCode, "html")
-    message.attach(textHTML)
     try:
-        goodSoilEmail = "goodsoilverify@gmail.com"
-        password = thePassword
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls(context=context)
-        server.login(goodSoilEmail, password)
-        message["From"] = goodSoilEmail
-        message["To"] = receiver_mail
-        server.sendmail(goodSoilEmail, receiver_mail, message.as_string())
-        server.quit()
+        params = {
+            "from": "GoodSoil <onboarding@resend.dev>",
+            "to": [receiver_mail],
+            "subject": "GoodSoil Email Verification",
+            "html": funHTMLCode,
+        }
+        resend.Emails.send(params)
         return True
     except Exception as e:
         print(f"Email error: {e}")
@@ -343,8 +339,6 @@ def addNotification(username, notification):
     notificationDoc = {"Username": username, "Notification": notification, "Seen": False}
     notificationsCollection.insert_many([notificationDoc])
     if getSettings(username)["Email"] == True:
-        context = ssl.create_default_context()
-        thePassword = os.environ.get('EMAIL_PASSWORD')
         funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -386,25 +380,17 @@ def addNotification(username, notification):
 </body>
 </html>
 """
-        message = MIMEMultipart("alternative")
-        message["Subject"] = "GoodSoil Notification"
-        textHTML = MIMEText(funHTMLCode, "html")
-        message.attach(textHTML)
         try:
-            goodSoilEmail = "goodsoilverify@gmail.com"
-            password = thePassword
-            server = smtplib.SMTP('smtp.gmail.com', 587)
-            server.starttls(context=context)
-            server.login(goodSoilEmail, password)
-            message["From"] = goodSoilEmail
-            reciever = getUser(username)["Email"]
-            message["To"] = reciever
-            server.sendmail(goodSoilEmail, reciever, message.as_string())
-            server.quit()
-            return True
+            receiver_email = getUser(username)["Email"]
+            params = {
+                "from": "GoodSoil <onboarding@resend.dev>",
+                "to": [receiver_email],
+                "subject": "GoodSoil Notification",
+                "html": funHTMLCode,
+            }
+            resend.Emails.send(params)
         except Exception as e:
             print(f"Email notification error: {e}")
-            return "Request to send email failed. Please try again later."
     return True
 
     
@@ -927,8 +913,7 @@ def forgotPassword(username, email):
         if theRandom == "letter":
             thing = random.choice(string.ascii_letters)
         newPassword = newPassword + str(thing)
-    context = ssl.create_default_context()
-    emailPassword = os.environ.get('EMAIL_PASSWORD')
+    
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -976,24 +961,18 @@ def forgotPassword(username, email):
 </body>
 </html>
 """
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "GoodSoil Password Reset"
-    textHTML = MIMEText(funHTMLCode, "html")
-    message.attach(textHTML)
     try:
-        goodSoilEmail = "goodsoilverify@gmail.com"
-        password = emailPassword
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls(context=context)
-        server.login(goodSoilEmail, password)
-        message["From"] = goodSoilEmail
-        userEmail = getUser(username)["Email"]
-        message["To"] = userEmail
-        server.sendmail(goodSoilEmail, userEmail, message.as_string())
-        server.quit()
+        params = {
+            "from": "GoodSoil <onboarding@resend.dev>",
+            "to": [userEmail],
+            "subject": "GoodSoil Password Reset",
+            "html": funHTMLCode,
+        }
+        resend.Emails.send(params)
     except Exception as e:
         print(f"Forgot password email error: {e}")
         return "Request to send email failed. Please try again later."
+    
     document = {"Username": username, "Time": datetime.datetime.now()}
     forgotPasswordCollection.insert_many([document])
     passwordHash = generate_password_hash(newPassword)
@@ -1032,16 +1011,15 @@ def deleteAccountLink(username, usernameLink, email, password, passwordTwo):
         diffInSeconds = diff.total_seconds()
         if diffInSeconds < 600:
             return "You can only request account deletion once every 10 minutes. Please try again later."
-    document = {"Username": username, "Time": datetime.datetime.now()}
+    document = [{"Username": username, "Time": datetime.datetime.now()}]
     deleteAccountsCollection.insert_many(document)
     deleteAccountsList = []
     myQuery = {"Username": username}
     myDoc = deleteAccountsCollection.find(myQuery)
     for i in myDoc:
         deleteAccountsList.append(i)
-    id = deleteAccountList[-1]["_id"]
-    context = ssl.create_default_context()
-    thePassword = os.environ.get("EMAIL_PASSWORD")
+    id = deleteAccountsList[-1]["_id"]
+    
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -1084,21 +1062,15 @@ def deleteAccountLink(username, usernameLink, email, password, passwordTwo):
 </body>
 </html>
 """
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "GoodSoil Account Deletion Confirmation"
-    textHTML = MIMEText(funHTMLCode, "html")
-    message.attach(textHTML)
     try:
-        goodSoilEmail = "goodsoilverify@gmail.com"
-        password = thePassword
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls(context=context)
-        server.login(goodSoilEmail, password)
-        message["From"] = goodSoilEmail
         userEmail = getUser(username)["Email"]
-        message["To"] = userEmail
-        server.sendmail(goodSoilEmail, userEmail, message.as_string())
-        server.quit()
+        params = {
+            "from": "GoodSoil <onboarding@resend.dev>",
+            "to": [userEmail],
+            "subject": "GoodSoil Account Deletion Confirmation",
+            "html": funHTMLCode,
+        }
+        resend.Emails.send(params)
         addLog(f"{username} requested to delete their account. A confirmation email has been sent to {userEmail}.")
         return True
     except Exception as e:
@@ -1139,8 +1111,7 @@ def deleteAccount(username, usernameLink, id):
     delete = {"Username": username}
     profilesCollection.delete_one(delete)
     addLog(f"{username} has successfully deleted their account.")
-    context = ssl.create_default_context()
-    thePassword = os.environ.get("EMAIL_PASSWORD")
+    
     funHTMLCode = f"""
 <!DOCTYPE html>
 <html>
@@ -1177,25 +1148,18 @@ def deleteAccount(username, usernameLink, id):
 </body>
 </html>
 """
-    message = MIMEMultipart("alternative")
-    message["Subject"] = "GoodSoil Account Deletion Confirmation"
-    textHTML = MIMEText(funHTMLCode, "html")
-    message.attach(textHTML)
     try:
-        goodSoilEmail = "goodsoilverify@gmail.com"
-        password = thePassword
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls(context=context)
-        server.login(goodSoilEmail, password)
-        message["From"] = goodSoilEmail
-        sendTo = email
-        message["To"] = sendTo
-        server.sendmail(goodSoilEmail, sendTo, message.as_string())
-        server.quit()
+        params = {
+            "from": "GoodSoil <onboarding@resend.dev>",
+            "to": [email],
+            "subject": "GoodSoil Account Deletion Confirmation",
+            "html": funHTMLCode,
+        }
+        resend.Emails.send(params)
         return True
     except Exception as e:
         print(f"Account deletion confirmation email error: {e}")
-        return "Request to send email failed. Please try again later."
+        return True  # Still return True since account is already deleted
 
 
 def topTen():
