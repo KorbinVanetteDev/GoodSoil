@@ -69,6 +69,8 @@ def init_collections():
 
 #mods hehehe thats me
 mods = ["polto"]
+#OG Users
+ogs = ["locooldog"]
 
 # Function to add a cookie to the session
 def addCookie(key, value):

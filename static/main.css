@@ -453,6 +453,21 @@ body:not(.auth) {
     animation: pulse 2s ease-in-out infinite;
 }
 
+.og-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    border-radius: 8px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(212, 0, 255, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
 @keyframes pulse {
     0%, 100% {
         transform: scale(1);
