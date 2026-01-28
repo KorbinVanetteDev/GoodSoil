@@ -3,7 +3,7 @@ from string import printable
 from werkzeug.security import check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from functions import addCookie, getCookie, removeCookie, createAccount, getUser, getHashedPassword, verify, checkEmailExists, checkUsernameExists, add_Description, follow, unFollow, getNotifications, deletePost, allSeen, makePost, getPost, getPostByID, viewPost, editComment, getCommentByID, addLog, addReport, deleteReport, getAllReports, changePassword, getNotificationsNotShown, forgotPassword, deleteAccount, allFollowRequests, topTen, changePublicSettings, changeEmailSettings, addNotification, denyTheFollowRequest, getSettings, editAPost, send_mail, likePost, unlikePost, comment, getAllUserPrivatePosts, getAllUserPublicPosts, deleteComment, changeEmail, getComments, clearNotifications, acceptTheFolloweRequest, deleteAccountLink, checkFollowRequest, pinPost, unpinPost
-from functions import mods
+from functions import mods, ogs
 import os
 from dotenv import load_dotenv
 
