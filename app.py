@@ -152,6 +152,7 @@ def profile(username):
         profileUser=user_doc,
         follow=follow,
         mods=mods,
+        ogs=ogs,
         requestPending=requestPending,
     )
     

@@ -465,7 +465,7 @@ body:not(.auth) {
     border-radius: 8px;
     text-transform: uppercase;
     box-shadow: 0 4px 12px rgba(212, 0, 255, 0.3);
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse-purple 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
@@ -476,5 +476,16 @@ body:not(.auth) {
     50% {
         transform: scale(1.05);
         box-shadow: 0 6px 16px rgba(255, 159, 28, 0.4);
+    }
+}
+
+@keyframes pulse-purple {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
     }
 }
