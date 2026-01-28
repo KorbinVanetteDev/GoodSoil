@@ -767,9 +767,9 @@ def deleteComment(username, commentID):
     comment = getCommentByID(commentID)
     if comment == False:
         return "That comment does not exist."
-    if username in mods:
+    if comment["Author"] == username:
         pass
-    elif comment["Author"] != username:
+    elif username in mods:
         pass
     else:
         return "You do not have permission to delete this comment."
