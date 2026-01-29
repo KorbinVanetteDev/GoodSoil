@@ -220,7 +220,7 @@ def send_mail(receiver_mail, username, id):
         <div class="content">
             <p>Hi <span class="highlight">{username}</span>,</p>
             <p>Thank you for creating an account on GoodSoil! Please verify your email address to activate your account and get started.</p>
-            <a href='https://goodsoil.onrender.com/verify/{username}/{str(id)}' class="button">Verify Email Address</a>
+            <a href='https://www.goodsoil.online/verify/{username}/{str(id)}' class="button">Verify Email Address</a>
             <p style="font-size: 14px; color: #666;">If you didn't create this account, please ignore this email.</p>
         </div>
         <div class="footer">
@@ -1062,7 +1062,7 @@ def deleteAccountLink(username, usernameLink, email, password, passwordTwo):
         <div class="content">
             <p>Hi <span class="highlight">{username}</span>,</p>
             <p>You requested to delete your GoodSoil account. To confirm this action, please click the button below:</p>
-            <a href='https://goodsoil.onrender.com/deleteaccount/{username}/{str(id)}' class="button">Confirm Account Deletion</a>
+            <a href='https://www.goodsoil.online/deleteaccount/{username}/{str(id)}' class="button">Confirm Account Deletion</a>
             <div class="warning">
                 <p><strong>⚠️ Warning:</strong> This action is permanent and cannot be undone. All your posts, comments, and data will be deleted.</p>
             </div>
